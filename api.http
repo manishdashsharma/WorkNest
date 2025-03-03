@@ -1,0 +1,35 @@
+# Description:
+# This file contains cURL requests for testing API endpoints using the REST Client extension.
+# Base URL: http://localhost:5000/api/v1
+
+@baseUrl = http://localhost:5000/api/v1
+
+### Server Health Check
+# Checks if the server is running and accessible.
+curl -X GET {{baseUrl}}/health
+
+### Get Self
+# Retrieves the authenticated user's information.
+curl -X GET {{baseUrl}}/self
+
+### Send OTP
+# Sends an OTP to the provided email.
+curl -X POST {{baseUrl}}/send-otp \
+     -H "Content-Type: application/json" \
+     -d '{
+       "email": "test@example.com"
+     }'
+
+### Verify OTP
+# Verifies the OTP for authentication.
+curl -X POST {{baseUrl}}/verify-otp \
+     -H "Content-Type: application/json" \
+     -d '{
+       "email": "test@example.com",
+       "otp": "211826"
+     }'
+
+### Self Identification
+# Retrieves the user's identity using their JWT token.
+curl -X GET {{baseUrl}}/self-identification \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2M2MTNmM2Y3ZGViODFiYTU2ZDMwY2YiLCJpYXQiOjE3NDEwMzUxNzksImV4cCI6MTc0MTAzODc3OX0.I8yGeScQac77KfEV-II31pJBx-6nx-E22uUaMEKJ4us"

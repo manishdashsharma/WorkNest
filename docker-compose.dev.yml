@@ -8,6 +8,8 @@ services:
       - mongo-data:/data/db
     networks:
       - queue-net
+    ports:
+      - '27017:27017'
     env_file: 
       - ./.env.development
     command: mongod --bind_ip_all
