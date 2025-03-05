@@ -1,35 +1,116 @@
-# Description:
-# This file contains cURL requests for testing API endpoints using the REST Client extension.
-# Base URL: http://localhost:5000/api/v1
-
+### =======================================
+# Set Base URL and Authentication Token
+### =======================================
 @baseUrl = http://localhost:5000/api/v1
+@AuthToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2M4NTNiYmFlNjdlMDhhM2RhOTIxYjIiLCJpYXQiOjE3NDExODU3NDQsImV4cCI6MTc0MTE4OTM0NH0.CtJeMZP4FUr-Vlf1oQo2Mw0WlWah0s7uAUHSLMl2guQ"
 
-### Server Health Check
-# Checks if the server is running and accessible.
+
+### =======================================
+# Server Health Check
+### =======================================
 curl -X GET {{baseUrl}}/health
 
-### Get Self
-# Retrieves the authenticated user's information.
-curl -X GET {{baseUrl}}/self
-
-### Send OTP
-# Sends an OTP to the provided email.
+### =======================================
+# Send OTP for Authentication
+### =======================================
 curl -X POST {{baseUrl}}/send-otp \
      -H "Content-Type: application/json" \
      -d '{
        "email": "test@example.com"
      }'
 
-### Verify OTP
-# Verifies the OTP for authentication.
+### =======================================
+# Verify OTP
+### =======================================
 curl -X POST {{baseUrl}}/verify-otp \
      -H "Content-Type: application/json" \
      -d '{
        "email": "test@example.com",
-       "otp": "211826"
+       "otp": "539791"
      }'
 
-### Self Identification
-# Retrieves the user's identity using their JWT token.
-curl -X GET {{baseUrl}}/self-identification \
-     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2M2MTNmM2Y3ZGViODFiYTU2ZDMwY2YiLCJpYXQiOjE3NDEwMzUxNzksImV4cCI6MTc0MTAzODc3OX0.I8yGeScQac77KfEV-II31pJBx-6nx-E22uUaMEKJ4us"
+
+### =======================================
+# Get Self (Authenticated User)
+### =======================================
+curl -X GET {{baseUrl}}/self-identification  \
+     -H "Authorization: Bearer {{AuthToken}}"
+
+
+### =======================================
+# Add Worker
+### =======================================
+curl -X POST {{baseUrl}}/add-workers \
+     -H "Authorization: Bearer {{AuthToken}}" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "John Doe",
+           "email": "johndoe@example.com",
+           "phoneNumber": "+1234567890",
+           "githubLink": "https://github.com/johndoe"
+         }'
+
+### =======================================
+# Get All Workers by Owner
+### =======================================
+curl -X GET {{baseUrl}}/get-workers-by-owner \
+     -H "Authorization: Bearer {{AuthToken}}"
+
+### =======================================
+# Get Worker by ID
+### =======================================
+curl -X GET {{baseUrl}}/get-workers/67c8255b43d05950f262996b \
+     -H "Authorization: Bearer {{AuthToken}}"
+
+### =======================================
+# Update Worker
+### =======================================
+curl -X POST {{baseUrl}}/update-worker/67c8255b43d05950f262996b \
+     -H "Authorization: Bearer {{AuthToken}}" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "John Updated",
+           "email": "updated@example.com",
+           "phoneNumber": "+1987654321",
+           "githubLink": "https://github.com/johndoe-updated"
+         }'
+
+### =======================================
+# Delete Worker (Soft Delete)
+### =======================================
+curl -X GET {{baseUrl}}/delete-worker/67c8255b43d05950f262996b \
+     -H "Authorization: Bearer {{AuthToken}}"
+
+### =======================================
+# Create Project
+### =======================================
+curl -X POST {{baseUrl}}/create-project \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {{AuthToken}}" \
+-d '{
+    "name": "New Website",
+    "startDate": "2025-03-10",
+    "endDate": "2025-06-30",
+    "totalBudget": 10000,
+    "projectAdvance": 2000,
+    "workers": [
+        {
+            "workerId": "67c853e8ae67e08a3da921bb",
+            "totalPayment": 3000,
+            "advanceGiven": 1000
+        }
+    ]
+}'
+
+### =======================================
+# Get All Projects
+### =======================================
+curl -X GET {{baseUrl}}/get-all-projects \
+-H "Authorization: Bearer {{AuthToken}}"
+
+### =======================================
+# Get Project by ID
+### =======================================
+curl -X GET {{baseUrl}}/get-project-details/67c85b69a220b02f85038f42 \
+-H "Authorization: Bearer {{AuthToken}}"
+
